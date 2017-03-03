@@ -37,7 +37,7 @@ ssh user@host
    esac
   ```
 4. Same username/useraccount should be need on `master` and `slaves` nodes for multinode installation.
-5. The following dependencies must be installed: make, ctags, gcc, flex, bison
+5. The following dependencies must be installed: make, ctags, gcc, flex, bison, ntpn, uname
 
 ### Installations:
 
