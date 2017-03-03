@@ -85,14 +85,8 @@ echo -en 'SPARKHISTORY_HTTP_ADDRESS=18080\n\n' >> config
 
 ##setting flag to setup hive and mysql or not
 echo -e "#Flag set for hive and mysql set up required or not" >> config
-echo -e 'Do you want to setup hive and mysql. This will be required for running benchmarks like TPCDS and HiBench'
-read -p "Please confirm ? [y/N] " prompt
-if [[ $prompt == "y" || $prompt == "Y" ]]
-then
-    echo -e 'SETUP_HIVE_MYSQL=Yes' >> config
-else 
-    echo -e 'SETUP_HIVE_MYSQL=No' >> config
-fi
+echo -e '#Change value below to Yes or No to setup hive and mysql. This will be required for running benchmarks like TPCDS and HiBench' >> config
+echo -e 'SETUP_HIVE_MYSQL=Yes' >> config
 
 echo -e
 echo -e 'Please check configuration (config file) once before run (setup.sh file).'
