@@ -12,16 +12,23 @@ echo -en '# Master Details\n' >> config
 MASTER=`hostname`
 echo -en 'MASTER='$MASTER'\n\n' >> config
 
-echo -en 'Please enter slave hostname details in format slave1_hostname,slave2_hostname \n'
-read SLAVE_HOSTNAME
+FILE=slave.hostname
+if [ -f $FILE ]; then
+	while IFS= read -r SLAVE_HOSTNAME; do
+        echo 'Reading slave.hostname'
+    done <$FILE
+else
+	echo -en 'Please enter slave hostname details in format slave1_hostname,slave2_hostname \n'
+	read SLAVE_HOSTNAME
+	echo $SLAVE_HOSTNAME > slave.hostname
+fi
 
 echo -en '# Using these format to save SLAVE Details: slave1IP,slave1cpu,slave1memory....\n' >> config
 echo -e
 
 j=0
-for i in `echo $SLAVE_HOSTNAME |tr ',' ' '`
+for slavehost in `echo $SLAVE_HOSTNAME |tr ',' ' '`
 do
-slavehost=$(ssh $i hostname)
 echo -en 'Collecting memory details from SLAVE machine '$slavehost' \n'
 freememory=$(ssh $slavehost free -m | awk '{print $4}'| head -2 | tail -1)
 memorypercent=$(awk "BEGIN { pc=80*$freememory/100; i=int(pc); print (pc-i<0.5)?i:i+1 }")
@@ -85,12 +92,17 @@ echo -en 'SPARKHISTORY_HTTP_ADDRESS=18080\n\n' >> config
 
 ##setting flag to setup hive and mysql or not
 echo -e "#Flag set for hive and mysql set up required or not" >> config
-echo -e '#Change value below to Yes or No to setup hive and mysql. This will be required for running benchmarks like TPCDS and HiBench' >> config
-echo -e 'SETUP_HIVE_MYSQL=Yes' >> config
+echo -e 'Do you want to setup hive and mysql. This will be required for running benchmarks like TPCDS and HiBench'
+read -p "Please confirm ? [y/N] " prompt
+if [[ $prompt == "y" || $prompt == "Y" ]]
+then
+    echo -e 'SETUP_HIVE_MYSQL=Yes' >> config
+else 
+    echo -e 'SETUP_HIVE_MYSQL=No' >> config
+fi
 
 echo -e
 echo -e 'Please check configuration (config file) once before run (setup.sh file).'
 echo -e 'You can modify hadoop or spark versions in config file'
 echo -e
 chmod +x config
-
