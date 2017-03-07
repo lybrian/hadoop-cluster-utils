@@ -14,12 +14,12 @@ echo -en 'MASTER='$MASTER'\n\n' >> config
 
 FILE=slave.hostname
 if [ -f $FILE ]; then
-	while IFS= read -r SLAVE_HOSTNAME; do
         echo 'Reading slave.hostname'
-    done <$FILE
+	SLAVE_HOSTNAME=$(head -n 1 $FILE)
 else
 	echo -en 'Please enter slave hostname details in format slave1_hostname,slave2_hostname \n'
 	read SLAVE_HOSTNAME
+	echo 'Saving to slave.hostname'
 	echo $SLAVE_HOSTNAME > slave.hostname
 fi
 
