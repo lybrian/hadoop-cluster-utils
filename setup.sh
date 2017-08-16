@@ -550,7 +550,7 @@ echo "---------------------------------------------" | tee -a $log
 				sudo apt-get -y update
 				sudo apt-get -y dist-upgrade
 
-				dpkg -S /usr/bin/mysq
+				dpkg -S /usr/bin/mysql
 				if [ $? -ne 0 ]
 				then
 					sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password passw0rd'
